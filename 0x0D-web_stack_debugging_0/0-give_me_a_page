@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Fixes the Apache server configuration in the Docker container to serve a page containing "Hello Holberton"
+
+# 1. Start Docker container
+docker run -p 8080:80 -d --name apache_debug holbertonschool/265-0
+
+# 2. Connect to the running container
+docker exec -it apache_debug /bin/bash
+
+# 3. Install Apache and enable it to start on boot
+apt-get update
+apt-get install -y apache2
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# 4. Create a simple index.html page
+echo "Hello Holberton" > /var/www/html/index.html
+
+# 5. Restart Apache service to apply changes
+service apache2 restart
+
+# 6. Exit from the container
+exit
+
+# 7. Test the setup
+curl 0:8080
