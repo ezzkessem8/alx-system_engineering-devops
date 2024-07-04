@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Configures Nginx to redirect /redirect_me to a specific URL with a 301 status code
+
+# Update package list and install Nginx
+apt-get update
+apt-get install -y nginx
+
+# Configure Nginx to redirect /redirect_me
+cat > /etc/nginx/sites-available/default << 'EOL'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location / {
+        root /var/www/html;
+        index index.html;
+    }
+
+    location = /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html;
+    }
+}
+EOL
+
+# Restart Nginx to apply the changes
+service nginx restart
+
+# Verify redirection
+curl -sI 127.0.0.1/redirect_me | grep "301 Moved Permanently"
