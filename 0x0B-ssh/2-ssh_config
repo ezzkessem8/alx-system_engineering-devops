@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Creates an SSH config file to use the private key and disable password authentication
+
+cat > ~/.ssh/config <<EOL
+Host 91440-web-01
+  HostName 54.173.46.154
+  User ubuntu
+  IdentityFile ~/.ssh/school
+  PasswordAuthentication no
+EOL
